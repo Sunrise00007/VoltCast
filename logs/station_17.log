@@ -1,0 +1,56 @@
+
+--- Attempt 1 (rc=0) ---
+Database initialized.
+Total records available: 20360
+
+Training model for Station 17...
+  Epoch 1/30 | Train Loss: 0.2162 | Val Loss: 0.0421
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 2/30 | Train Loss: 0.0711 | Val Loss: 0.0395
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 3/30 | Train Loss: 0.0467 | Val Loss: 0.0291
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 4/30 | Train Loss: 0.0397 | Val Loss: 0.0289
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 5/30 | Train Loss: 0.0329 | Val Loss: 0.0241
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 6/30 | Train Loss: 0.0261 | Val Loss: 0.0172
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 7/30 | Train Loss: 0.0200 | Val Loss: 0.0147
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 8/30 | Train Loss: 0.0179 | Val Loss: 0.0125
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 9/30 | Train Loss: 0.0151 | Val Loss: 0.0116
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 10/30 | Train Loss: 0.0138 | Val Loss: 0.0109
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 11/30 | Train Loss: 0.0128 | Val Loss: 0.0107
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 12/30 | Train Loss: 0.0119 | Val Loss: 0.0098
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 13/30 | Train Loss: 0.0119 | Val Loss: 0.0093
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 14/30 | Train Loss: 0.0113 | Val Loss: 0.0089
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 15/30 | Train Loss: 0.0109 | Val Loss: 0.0089
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 16/30 | Train Loss: 0.0107 | Val Loss: 0.0087
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 17/30 | Train Loss: 0.0110 | Val Loss: 0.0088
+  Epoch 18/30 | Train Loss: 0.0104 | Val Loss: 0.0087
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 19/30 | Train Loss: 0.0102 | Val Loss: 0.0089
+  Epoch 20/30 | Train Loss: 0.0096 | Val Loss: 0.0086
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 21/30 | Train Loss: 0.0102 | Val Loss: 0.0083
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 22/30 | Train Loss: 0.0100 | Val Loss: 0.0088
+  Epoch 23/30 | Train Loss: 0.0094 | Val Loss: 0.0093
+  Epoch 24/30 | Train Loss: 0.0096 | Val Loss: 0.0083
+  Epoch 25/30 | Train Loss: 0.0095 | Val Loss: 0.0083
+  Epoch 26/30 | Train Loss: 0.0093 | Val Loss: 0.0096
+  Epoch 27/30 | Train Loss: 0.0097 | Val Loss: 0.0096
+  Epoch 28/30 | Train Loss: 0.0093 | Val Loss: 0.0080
+    -> Saved models/model_station_17.pt and models/scaler_station_17.joblib
+  Epoch 29/30 | Train Loss: 0.0088 | Val Loss: 0.0090
+  Epoch 30/30 | Train Loss: 0.0091 | Val Loss: 0.0081

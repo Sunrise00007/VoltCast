@@ -102,9 +102,3 @@ def run_collector_loop():
 
 if __name__ == "__main__":
     run_collector_loop()
-        
-        # Sleep for 15 minutes (or as defined in .env)
-        time.sleep(900)
-
-if __name__ == "__main__":
-    run_collector_loop()

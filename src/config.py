@@ -25,3 +25,6 @@ class Config:
     
     MODEL_PATH = "models/model.pt"
     SCALER_PATH = "models/scaler.joblib"
+
+    # Station embedding dimension (learned embedding for station_id)
+    STATION_EMBED_DIM = int(os.getenv("STATION_EMBED_DIM", "8"))

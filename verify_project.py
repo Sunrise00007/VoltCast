@@ -44,18 +44,26 @@ def check_database():
         
         # Check tables
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        tables = cursor.fetchall()
+        tables = [t[0] for t in cursor.fetchall()]
         
-        # Check record count
-        cursor.execute("SELECT COUNT(*) FROM station_logs")
-        count = cursor.fetchone()[0]
+        # Counts
+        stations_count = 0
+        logs_count = 0
+        if 'stations' in tables:
+            cursor.execute("SELECT COUNT(*) FROM stations")
+            stations_count = cursor.fetchone()[0]
+        if 'station_logs' in tables:
+            cursor.execute("SELECT COUNT(*) FROM station_logs")
+            logs_count = cursor.fetchone()[0]
         
         conn.close()
         
-        print_status("Database Exists", True)
-        print(f"  Tables: {[t[0] for t in tables]}")
-        print(f"  Records: {count:,}")
-        return True
+        has_tables = 'stations' in tables and 'station_logs' in tables
+        print_status("Database Exists", has_tables)
+        print(f"  Tables: {tables}")
+        print(f"  Stations: {stations_count:,}")
+        print(f"  Log records: {logs_count:,}")
+        return has_tables
     except Exception as e:
         print_status("Database Check", False, str(e))
         return False

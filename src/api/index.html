@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging Availability Forecaster</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .btn-disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .availability-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .availability-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .availability-text {
+            font-size: 0.8em;
+            color: #666;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .status-bar {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.error {
+            background: #f87171;
+            animation: none;
+        }
+
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .station-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .station-card:nth-child(1) { animation-delay: 0.1s; }
+        .station-card:nth-child(2) { animation-delay: 0.2s; }
+        .station-card:nth-child(3) { animation-delay: 0.3s; }
+        .station-card:nth-child(4) { animation-delay: 0.4s; }
+        .station-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .station-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+        }
+
+        .station-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .station-id {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-badge.high {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.congested {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .prediction-display {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .ports-number {
+            font-size: 3em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .ports-label {
+            font-size: 0.9em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc2626;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #22c55e;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .refresh-info {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .stations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ EV Charging Forecaster</h1>
+            <p>Real-time availability predictions for charging stations</p>
+        </header>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span id="lastUpdate">Last update: --:--:--</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh Now</button>
+            <button class="btn btn-secondary" onclick="toggleAutoRefresh()" id="autoRefreshBtn">
+                ⏱️ Enable Auto-Refresh (30s)
+            </button>
+        </div>
+
+        <div id="messageContainer"></div>
+        <div id="loadingContainer" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Fetching prediction data...</p>
+        </div>
+
+        <div class="stations-grid" id="stationsContainer"></div>
+
+        <div class="refresh-info">
+            Last automatic refresh: <span id="autoRefreshTime">Never</span>
+        </div>
+
+        <footer>
+            <p>🚗 Smart EV Charging Station Availability System</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">API: http://localhost:8000</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let STATIONS = []; // array of station ids
+        let STATION_META = {}; // id -> station metadata
+        let autoRefreshInterval = null;
+        let autoRefreshEnabled = false;
+
+        async function loadStations(){
+            try {
+                const resp = await fetch(`${API_URL}/stations`);
+                if (!resp.ok) throw new Error('Failed to load stations');
+                const stations = await resp.json();
+                STATIONS = stations.map(s => s.id);
+                STATION_META = Object.fromEntries(stations.map(s => [s.id, s]));
+            } catch (err) {
+                showMessage('error', 'Could not load stations: ' + err.message);
+                console.error(err);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadStations();
+            refreshData();
+        });
+
+        async function refreshData() {
+            const container = document.getElementById('stationsContainer');
+            const loading = document.getElementById('loadingContainer');
+            const message = document.getElementById('messageContainer');
+
+            container.innerHTML = '';
+            loading.style.display = 'block';
+            message.innerHTML = '';
+
+            try {
+                // Check API health first
+                const healthCheck = await fetch(`${API_URL}/`);
+                if (!healthCheck.ok) {
+                    throw new Error('API is not responding');
+                }
+
+                // If there are no stations loaded, show helpful message
+                if (!STATIONS || STATIONS.length === 0) {
+                    loading.style.display = 'none';
+                    updateStatus('error', '⚠️ No stations available');
+                    showMessage('error', 'No stations found in the system. Generate data or check the API.')
+                    return;
+                }
+
+                updateStatus('connected', '🟢 Connected - Fetching predictions...');
+
+                // Fetch all predictions
+                const predictions = await Promise.all(
+                    STATIONS.map(id => fetchPrediction(id))
+                );
+
+                loading.style.display = 'none';
+                updateStatus('connected', '🟢 Connected - All data loaded');
+
+                // Render cards
+                predictions.forEach(prediction => {
+                    if (prediction) {
+                        container.appendChild(createStationCard(prediction));
+                    }
+                });
+
+                // Update timestamp
+                updateTimestamp();
+                showMessage('success', '✅ Predictions updated successfully!');
+
+            } catch (error) {
+                loading.style.display = 'none';
+                updateStatus('error', '🔴 API Error: ' + error.message);
+                showMessage('error', `❌ Error: ${error.message}`);
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        async function fetchPrediction(stationId) {
+            try {
+                const response = await fetch(`${API_URL}/predict/${stationId}`);
+                if (!response.ok) {
+                    // If per-station prediction is missing, fall back gracefully
+                    console.warn(`Station ${stationId} prediction error: ${response.statusText}`);
+                    return null;
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Error fetching station ${stationId}:`, error);
+                return null;
+            }
+        }
+
+        async function refreshStation(stationId, cardEl) {
+            // Refresh a single station's prediction and update the card in-place
+            try {
+                const response = await fetch(`${API_URL}/predict/${stationId}`);
+                if (!response.ok) throw new Error('Prediction fetch failed');
+                const prediction = await response.json();
+                const newCard = createStationCard(prediction);
+                cardEl.replaceWith(newCard);
+                showMessage('success', `✅ Station ${stationId} updated`);
+            } catch (e) {
+                showMessage('error', `Could not refresh station ${stationId}: ${e.message}`);
+            }
+        }
+
+        function createStationCard(prediction) {
+            const card = document.createElement('div');
+            card.className = 'station-card';
+
+            // Use enhanced prediction data
+            const name = prediction.station_name || `Station ${prediction.station_id}`;
+            const address = prediction.address || '';
+            const stationType = prediction.station_type || 'unknown';
+            const totalPorts = prediction.total_ports || 10;
+            const availabilityPercentage = prediction.availability_percentage || 0;
+
+            const isHighAvailability = prediction.predicted_available_ports > 1;
+            const statusClass = isHighAvailability ? 'high' : 'congested';
+            const statusText = prediction.status || (isHighAvailability ? 'High Availability' : 'Congested');
+
+            const time = new Date(prediction.current_time).toLocaleTimeString();
+            
+            // Station type styling
+            const typeColors = {
+                'residential': '#4CAF50',
+                'commercial': '#2196F3', 
+                'highway': '#FF9800',
+                'downtown': '#9C27B0'
+            };
+            const typeColor = typeColors[stationType] || '#666';
+
+            card.innerHTML = `
+                <div class="station-header">
+                    <div>
+                      <div class="station-id">${name} (#${prediction.station_id})</div>
+                      <div style="font-size:0.9em;color:#666">${address}</div>
+                      <div style="font-size:0.8em;color:${typeColor};margin-top:4px;">
+                        📍 ${stationType.charAt(0).toUpperCase() + stationType.slice(1)} • ${totalPorts} total ports
+                      </div>
+                    </div>
+                    <div class="status-badge ${statusClass}">${statusText}</div>
+                </div>
+
+                <div class="prediction-display">
+                    <div class="ports-label">Available Ports</div>
+                    <div class="ports-number">${Math.round(prediction.predicted_available_ports)}</div>
+                    <div class="availability-bar">
+                        <div class="availability-fill" style="width: ${availabilityPercentage}%; background-color: ${availabilityPercentage > 50 ? '#4CAF50' : availabilityPercentage > 20 ? '#FF9800' : '#F44336'};"></div>
+                    </div>
+                    <div class="availability-text">${availabilityPercentage.toFixed(1)}% available</div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-row">
+                        <span class="info-label">Type:</span>
+                        <span style="color: ${typeColor}; font-weight: 500;">${stationType.charAt(0).toUpperCase() + stationType.slice(1)}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Ports:</span>
+                        <span>${totalPorts}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Updated:</span>
+                        <span>${time}</span>
+                    </div>
+                </div>
+            `;
+
+            // Enhanced button section
+            const btnWrapper = document.createElement('div');
+            btnWrapper.style.display = 'flex';
+            btnWrapper.style.justifyContent = 'space-between';
+            btnWrapper.style.marginTop = '12px';
+            btnWrapper.style.gap = '8px';
+
+            // Navigation button (enhanced)
+            const navBtn = document.createElement('button');
+            const canNavigate = prediction.navigation_available !== false && prediction.predicted_available_ports > 0;
+            navBtn.className = canNavigate ? 'btn btn-primary' : 'btn btn-disabled';
+            navBtn.textContent = canNavigate ? '🧭 Navigate to Station' : '🚫 Station Full';
+            navBtn.disabled = !canNavigate;
+            
+            if (canNavigate) {
+                navBtn.addEventListener('click', async () => {
+                    try {
+                        showMessage('success', `🧭 Getting directions to ${name}...`);
+                        const r = await fetch(`${API_URL}/stations/${prediction.station_id}/navigate`);
+                        if (!r.ok) throw new Error('Navigation fetch failed');
+                        const j = await r.json();
+                        if (j.maps_url) {
+                            window.open(j.maps_url, '_blank');
+                            showMessage('success', `🗺️ Directions opened for ${name}`);
+                        }
+                    } catch (e) {
+                        showMessage('error', 'Could not fetch directions: ' + e.message);
+                    }
+                });
+            } else {
+                navBtn.title = 'Station is currently full or unavailable';
+            }
+
+            // Refresh button
+            const refreshBtn = document.createElement('button');
+            refreshBtn.className = 'btn btn-secondary';
+            refreshBtn.textContent = '🔁 Refresh';
+            refreshBtn.addEventListener('click', () => refreshStation(prediction.station_id, card));
+
+            // Details button (new)
+            const detailsBtn = document.createElement('button');
+            detailsBtn.className = 'btn btn-info';
+            detailsBtn.textContent = '📊 Details';
+            detailsBtn.addEventListener('click', () => {
+                alert(`Station Details:\n\nName: ${name}\nType: ${stationType}\nAddress: ${address}\nTotal Ports: ${totalPorts}\nAvailable: ${Math.round(prediction.predicted_available_ports)}\nAvailability: ${availabilityPercentage.toFixed(1)}%\n\nCoordinates: ${prediction.latitude.toFixed(6)}, ${prediction.longitude.toFixed(6)}`);
+            });
+
+            btnWrapper.appendChild(navBtn);
+            btnWrapper.appendChild(refreshBtn);
+            btnWrapper.appendChild(detailsBtn);
+            card.appendChild(btnWrapper);
+
+            return card;
+        }
+
+        function updateStatus(status, text) {
+            const dot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            if (status === 'connected') {
+                dot.classList.remove('error');
+            } else {
+                dot.classList.add('error');
+            }
+            statusText.textContent = text;
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = `Last update: ${time}`;
+            document.getElementById('autoRefreshTime').textContent = time;
+        }
+
+        function showMessage(type, text) {
+            const container = document.getElementById('messageContainer');
+            const messageClass = type === 'success' ? 'success-message' : 'error-message';
+            container.innerHTML = `<div class="${messageClass}">${text}</div>`;
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        function toggleAutoRefresh() {
+            const btn = document.getElementById('autoRefreshBtn');
+
+            if (autoRefreshEnabled) {
+                // Disable
+                clearInterval(autoRefreshInterval);
+                autoRefreshEnabled = false;
+                btn.textContent = '⏱️ Enable Auto-Refresh (30s)';
+                btn.style.background = 'rgba(255,255,255,0.2)';
+                showMessage('success', '⏸️ Auto-refresh disabled');
+            } else {
+                // Enable
+                autoRefreshEnabled = true;
+                btn.textContent = '⏸️ Disable Auto-Refresh';
+                btn.style.background = 'rgba(255,255,255,0.4)';
+                showMessage('success', '▶️ Auto-refresh enabled (every 30 seconds)');
+
+                // Initial refresh
+                refreshData();
+
+                // Set interval
+                autoRefreshInterval = setInterval(refreshData, 30000); // 30 seconds
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'r' || e.key === 'R') {
+                refreshData();
+            }
+        });
+    </script>
+</body>
+</html>
