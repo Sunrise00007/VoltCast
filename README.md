@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # ⚡ EV Charging Forecaster
 
 Real-time EV charging station availability forecasting engine using Deep Learning (LSTM) and FastAPI. An end-to-end ML system solving range anxiety by predicting port congestion.
@@ -106,7 +106,7 @@ curl http://localhost:8000/predict/1
 
 ---
 
-<<<<<<< HEAD
+
 ## 📦 Installation
 
 ### **Requirements**
@@ -255,7 +255,7 @@ PYTHONPATH="." python src/evaluate.py
 
 ```
 bike_project/
-<<<<<<< HEAD
+
 ├── requirements.txt              # Python dependencies
 ├── start_project.sh              # Startup script
 ├── setup_data.py                 # Data initialization
@@ -319,7 +319,7 @@ bike_project/
 
 ---
 
-<<<<<<< HEAD
+
 ## 🏃 How to Run
 
 ### **Option 1: Using Startup Script (Recommended)**
