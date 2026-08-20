@@ -5,7 +5,7 @@ Real-time EV charging station availability forecasting engine using Deep Learnin
 
 ---
 
-## 📋 Table of Contents
+## 📋 Table of Contents               
 
 - [Project Overview](#project-overview)
 - [Quick Start](#quick-start)
