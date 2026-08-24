@@ -107,7 +107,8 @@ curl http://localhost:8000/predict/1
 ---
 
 
-## 📦 Installation
+## 📦 Installation.                    
+
 
 ### **Requirements**
 - Python 3.8+
