@@ -19,7 +19,7 @@ Real-time EV charging station availability forecasting engine using Deep Learnin
 
 ---
 
-## 🎯 Project Overview
+## 🎯 Project Overview.                             
 
 **VoltCast** is a complete end-to-end machine learning system that:
 - Predicts EV charging station availability using LSTM neural networks
