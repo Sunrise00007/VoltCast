@@ -5,7 +5,7 @@ Real-time EV charging station availability forecasting engine using Deep Learnin
 
 ---
 
-## 📋 Table of Contents               
+## 📋 Table of Contents                
 
 - [Project Overview](#project-overview)
 - [Quick Start](#quick-start)
@@ -28,7 +28,7 @@ Real-time EV charging station availability forecasting engine using Deep Learnin
 - Stores historical data in SQLite database
 - Uses scikit-learn preprocessing and model evaluation
 
-### What You Get
+### What You Get.                          
 
 - ✅ Backend API (FastAPI)
 - ✅ LSTM ML Model (PyTorch)
