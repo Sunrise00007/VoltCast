@@ -349,7 +349,7 @@ This will populate `ev_charging.db` with the `stations` table and many `station_
 
 ---
 
-## ✨ Features
+## ✨ Features.                                                                  
 
 ### **Dashboard UI**
 - Real-time charging station availability display
