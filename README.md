@@ -39,7 +39,7 @@ Real-time EV charging station availability forecasting engine using Deep Learnin
 
 ---
 
-## 🚀 Quick Start (1 Minute)
+## 🚀 Quick Start (1 Minute)                                 
 
 ### **Terminal:**
 ```bash
@@ -83,7 +83,7 @@ GET http://localhost:8000/
 ```
 **Response:** `{"status": "active", "system": "EV Forecasting System"}`
 
-#### 2. Make Prediction for a Station
+#### 2. Make Prediction for a Station                         
 ```bash
 GET http://localhost:8000/predict/{station_id}
 ```
@@ -252,7 +252,7 @@ PYTHONPATH="." python src/evaluate.py
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure                       
 
 ```
 bike_project/
