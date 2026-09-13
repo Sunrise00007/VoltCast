@@ -377,7 +377,7 @@ This will populate `ev_charging.db` with the `stations` table and many `station_
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture                                       
 
 ### **Technology Stack**
 ```
@@ -409,7 +409,7 @@ Raw Data → Preprocessing → Feature Scaling → LSTM Model → Predictions
 
 ---
 
-## ✅ Verification
+## ✅ Verification                 
 
 ### **Check Project Status**
 ```bash
