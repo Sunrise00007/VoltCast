@@ -505,7 +505,7 @@ Edit `src/config.py` to customize:
 
 ---
 
-## 📝 Key Files
+## 📝 Key Files                             
 
 | File | Purpose |
 |------|---------|
@@ -691,13 +691,13 @@ Get availability prediction for a station
 
 This is an **LSTM-based time series forecasting system** that predicts EV charging station availability.
 
-**Key Features:**
-- ✅ Real-time predictions
+**Key Features:**                  
+- ✅ Real-time predictions                         
 - ✅ Temporal embeddings (hour, day_of_week)
-- ✅ Automatic feature scaling
+- ✅ Automatic feature scaling           
 - ✅ REST API interface
-- ✅ SQLite database
-- ✅ Model persistence
+- ✅ SQLite database                
+- ✅ Model persistence            
 
 **Use Case:**
 Predict available charging ports at EV stations to help drivers find charging availability.
