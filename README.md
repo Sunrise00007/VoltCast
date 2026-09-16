@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS station_logs (
 
 ---
 
-## 🎯 How to Use
+## 🎯 How to Use                
 
 ### 1. **Access the API**
 Open in browser: http://localhost:8000
@@ -321,7 +321,7 @@ bike_project/
 ---
 
 
-## 🏃 How to Run
+## 🏃 How to Run.                               
 
 ### **Option 1: Using Startup Script (Recommended)**
 ```bash
@@ -449,7 +449,7 @@ This will verify:
 
 ---
 
-## 🔌 API Documentation
+## 🔌 API Documentation                                         
 
 ### **Base URL**
 ```
