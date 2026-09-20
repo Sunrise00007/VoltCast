@@ -1,5 +1,5 @@
 
-# ⚡ EV Charging Forecaster 
+# ⚡ EV Charging Forecaster                               
 
 Real-time EV charging station availability forecasting engine using Deep Learning (LSTM) and FastAPI. An end-to-end ML system solving range anxiety by predicting port congestion.
 
@@ -83,7 +83,7 @@ GET http://localhost:8000/
 ```
 **Response:** `{"status": "active", "system": "EV Forecasting System"}`
 
-#### 2. Make Prediction for a Station                         
+#### 2. Make Prediction for a Station                           
 ```bash
 GET http://localhost:8000/predict/{station_id}
 ```
@@ -94,7 +94,7 @@ curl http://localhost:8000/predict/1
 ```
 
 **Response:**
-```json
+```json 
 {
   "station_id": 1,
   "current_time": "2026-01-22T...",
@@ -121,18 +121,18 @@ pip install -r requirements.txt
 
 ### **Dependencies:**
 - fastapi==0.95.2
-- uvicorn==0.22.0
-- pandas==2.2.2
+- uvicorn==0.22.0 
+- pandas==2.2.2 
 - numpy==1.26.4
 - torch>=2.1
-- scikit-learn==1.3.2
+- scikit-learn==1.3.2 
 - sqlalchemy>=2.0,<2.1
 - joblib==1.3.2
-- matplotlib==3.8.1
+- matplotlib==3.8.1 
 - pytest==7.4.2
-- python-dotenv==1.0.1
+- python-dotenv==1.0.1 
 - requests==2.31.0
-- pydantic==1.10.12
+- pydantic==1.10.12 
 =======
 ## 📊 Project Components
 
@@ -189,7 +189,7 @@ POLLING_INTERVAL=900
 ### Model Hyperparameters (`src/config.py`)
 - SEQ_LENGTH: 12 (predict from last 12 timesteps)
 - HIDDEN_DIM: 64
-- NUM_LAYERS: 2
+- NUM_LAYERS: 2 
 - DROPOUT: 0.2
 - BATCH_SIZE: 32
 - EPOCHS: 20
@@ -237,7 +237,7 @@ PYTHONPATH="." python src/data_collector.py
 ```
 (Run in background, Ctrl+C to stop after 5 minutes)
 
-### 5. **Retrain Model**
+### 5. **Retrain Model** 
 ```bash
 cd /Users/sunrise/Documents/bike_project 
 PYTHONPATH="." python src/train.py
@@ -321,7 +321,7 @@ bike_project/
 ---
 
 
-## 🏃 How to Run.                               
+## 🏃  How to Run.                               
 
 ### **Option 1: Using Startup Script (Recommended)**
 ```bash
